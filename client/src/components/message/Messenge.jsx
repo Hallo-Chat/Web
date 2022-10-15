@@ -1,7 +1,7 @@
 import "./messenge.css"
-import {format} from "timeago.js";
+import { format } from "timeago.js";
 
-export default function Messenge({message,own}) {
+export default function Messenge({ message, own }) {
     return (
         <div className={own ? "messenge own" : "messenge"}>
             <div className="messengeTop">

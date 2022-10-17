@@ -1,0 +1,187 @@
+#messenger {
+  height: calc(100vh - 70px);
+  display: flex;
+  z-index: 100;
+}
+
+.chatMenu {
+  flex: 2.5;
+  height: 100%;
+}
+
+.search-top {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.4rem 1rem;
+
+  div ~ div {
+    margin: 0 0.2rem;
+  }
+
+  &_add-friend,
+  &_create-group {
+    font-size: 1.3rem;
+    cursor: pointer;
+    width: 30px;
+
+    text-align: center;
+    border-radius: 15px;
+    transition: 0.2s;
+  }
+
+  &_add-friend:hover,
+  &_create-group:hover {
+    background-color: #c1c1c1;
+  }
+
+  &_input-search {
+    flex-grow: 1;
+    border: 1px solid black;
+    border-radius: 30px;
+    height: 30px;
+  }
+}
+
+.searchbars {
+  width: 100%;
+  height: 30px;
+  background-color: #c1c1c1;
+  border-radius: 30px;
+  display: flex;
+  align-items: center;
+}
+
+.searchbars:hover {
+  background-color: white;
+  box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
+}
+
+.icon-search {
+  font-size: 20px !important;
+  margin-left: 10px;
+}
+
+.searchInputs {
+  border: none;
+  width: 75%;
+  background-color: #c1c1c1;
+}
+
+.searchInputs:hover {
+  background-color: white;
+}
+.searchInputs {
+  height: 95%;
+  outline: none;
+}
+.searchbars:focus {
+  outline: none;
+  background-color: white;
+}
+
+.chatMenuInput {
+  width: 90%;
+  padding: 10px 0px;
+  border: none;
+  border-bottom: 1px solid gray;
+}
+
+.chatBox {
+  flex: 7;
+}
+
+.chatBoxTop {
+  height: 100%;
+  overflow-y: scroll;
+  padding-right: 10px;
+}
+
+.chatBoxWrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+}
+
+.chatBoxBottom {
+  margin-top: 5px;
+  display: flex;
+  width: 100%;
+  border-top: 1px solid #0091ff;
+  align-items: center;
+  justify-self: space-between;
+}
+
+.chatMessageInput {
+  width: 90%;
+  height: 30px;
+  padding: 10px;
+  border: none;
+  margin-right: 5px;
+}
+
+.chatMessageInput:focus {
+  outline: none;
+}
+
+.chatSubmitButton {
+  width: 70px;
+  height: 40px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: teal;
+  color: white;
+}
+
+.chatMenuWrapper {
+  border-right: 1px solid #c1c1c1;
+}
+
+.chatMenuWrapper,
+.chatBoxWrapper,
+.chatOnlineWrapper {
+  padding: 10px;
+  height: 100%;
+}
+
+.noConversationText {
+  position: absolute;
+  top: 10%;
+  font-size: 50px;
+  color: gray;
+  text-align: center;
+  cursor: default;
+}
+
+.landing-app {
+  padding: 8% 0;
+  .title-welcome {
+    width: 60%;
+    display: flex;
+    margin-left: 200px;
+    justify-content: center;
+
+    align-items: center;
+    flex-direction: column;
+    &-heading {
+      font-size: 22px;
+      font-weight: 500;
+      margin-bottom: 2rem;
+    }
+
+    &-detail {
+      text-align: center;
+      font-size: 16px;
+    }
+  }
+  .carousel-slider {
+    margin-top: 3rem;
+    margin-left: 220px;
+  }
+}
+
+.navigationChats {
+}

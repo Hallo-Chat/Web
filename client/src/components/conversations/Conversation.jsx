@@ -31,7 +31,14 @@ export default function Conversation({ conversation, currentUser }) {
         }
         alt=""
       />
-      <span className="conversationName">{user?.username}</span>
+      <div className="conversationTitle">
+        <span className="conversationName">{user?.username}</span>
+        <div className="conversationMess">
+          <span className="userCurentChatName">You:</span>
+          <span className="userCurentChatMess">123123131212</span>
+        </div>
+      </div>
+      <span className="rightbarOnlineChat"></span>
     </div>
   );
 }

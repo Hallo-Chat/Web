@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "react-slideshow-image": "^4.0.5",
+    "sass": "^1.55.0"
+  }
+}

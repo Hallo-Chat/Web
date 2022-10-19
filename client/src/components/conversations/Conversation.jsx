@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import "./conversation.css";
+import { format } from "timeago.js";
 
 export default function Conversation({ conversation, currentUser }) {
   const [user, setUser] = useState(null);
@@ -32,13 +33,15 @@ export default function Conversation({ conversation, currentUser }) {
         alt=""
       />
       <div className="conversationTitle">
-        <span className="conversationName">{user?.username}</span>
+        <div className="conversationNameTime">
+          <span className="conversationName">{user?.username}</span>
+        </div>
         <div className="conversationMess">
           <span className="userCurentChatName">You:</span>
-          <span className="userCurentChatMess">123123131212</span>
+          <span className="userCurentChatMess">Are you OK?</span>
         </div>
+        <span className="conversationTime">{format(user?.createdAt)}</span>
       </div>
-      <span className="rightbarOnlineChat"></span>
     </div>
   );
 }

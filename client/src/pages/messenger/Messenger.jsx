@@ -1,7 +1,9 @@
 import Conversation from "../../components/conversations/Conversation"
 import Messenge from "../../components/message/Messenge"
 import ChatOnline from "../../components/chatOnline/ChatOnline"
+import PermContactCalendarIcon from '@mui/icons-material/PermContactCalendar';
 import Topbar from "../../components/topbar/Topbar"
+import SettingsIcon from '@mui/icons-material/Settings';
 import SearchIcon from '@mui/icons-material/Search';
 import "./messenger.scss"
 import { Col } from 'antd';
@@ -17,6 +19,7 @@ export default function Messenger() {
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const [conversations, setConversations] = useState([]);
   const [currentChat, setCurrentChat] = useState(null);
+  const [userChat, setUserChat] = useState(null);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [arrivalMessage, setArrivalMessage] = useState(null);
@@ -35,7 +38,6 @@ export default function Messenger() {
         text: data.text,
         createdAt: Date.now(),
       });
-      console.log("ok:" + data);
     });
   }, []);
 
@@ -87,9 +89,8 @@ export default function Messenger() {
     };
 
     const receiverId = currentChat.members.find(
-      (member) => member !== user._id
+      (member) => member !== user._id,
     );
-
     socket.current.emit("sendMessage", {
       senderId: user._id,
       receiverId,
@@ -111,7 +112,6 @@ export default function Messenger() {
 
   return (
     <>
-      <Topbar />
       <div id="messenger">
         <div className="chatMenu">
           <div className="chatMenuWrapper">
@@ -129,22 +129,34 @@ export default function Messenger() {
                 <UsergroupAddOutlined />
               </div>
             </div>
-            <hr />
+
             {conversations.map(c => (
-              <div onClick={() => setCurrentChat(c)}>
-                <Conversation conversation={c} currentUser={user} />
+              <div onClick={() => { setCurrentChat(c) }}>
+                {
+                  <Conversation conversation={c} currentUser={user} />
+                }
               </div>
             ))}
           </div>
+          <div className="menuBottom">
+            <div className="iconMenuBottom">
+              <div className="iconMenuBottom_setting">
+                <SettingsIcon style={{ fontSize: 35 }} />
+              </div>
+              <div className="iconMenuBottom_contact">
+                <PermContactCalendarIcon style={{ fontSize: 35 }} />
+              </div>
+            </div>
+          </div>
         </div>
         <div className="chatBox">
-          <div className="chatContainer">
-
-          </div>
           <div className="chatBoxWrapper">
             {
               currentChat ? (
                 <>
+                  <div className="chatContainer">
+                    <Topbar currentChat={currentChat} />
+                  </div>
                   <div className="chatBoxTop">
                     {messages.map(m => (
                       <div ref={scrollRef}>

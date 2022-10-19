@@ -19,9 +19,9 @@
 
 .messengeText {
   padding: 10px;
-  border-radius: 20px;
   max-width: 400px;
-  background-color: white;
+  border-radius: 10px 10px 10px 0px;
+  background-color: #eeeeee;
 }
 
 .messengeBottom {
@@ -34,6 +34,14 @@
 }
 
 .messenge.own .messengeText {
-  background-color: #dae9ff;
-  color: black;
+  background-color: #144ba8;
+  color: white;
+  border-radius: 10px 10px 0px 10px;
+}
+
+.messenge.own .imageChat {
+  display: none;
+}
+.messenge.own .nameTime {
+  text-align: right;
 }

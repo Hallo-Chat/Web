@@ -2,21 +2,23 @@
   display: flex;
   align-items: center;
   padding: 10px;
+  width: 94%;
+  height: 100%;
   cursor: pointer;
-  margin-top: 20px;
   position: relative;
 }
 
 .conversation:hover {
-  background-color: #e6f0ff;
+  background-color: #093186;
 }
 
 .conversationImg {
-  width: 40px;
-  height: 40px;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
   object-fit: cover;
   margin-right: 20px;
+  margin-left: 10px;
 }
 
 .conversationName {
@@ -24,25 +26,29 @@
   font-size: 20px;
 }
 
-.rightbarOnlineChat {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background-color: limeGreen;
-  position: absolute;
-  right: 0;
-  border: 2px solid white;
+.conversationNameTime {
+  display: flex;
+  position: relative;
 }
 
-.conversationName {
+.conversationTime {
+  font-size: 12px;
+  position: absolute;
+  right: 7px;
+  top: 17px;
 }
 
 .conversationMess {
   display: flex;
-  font-size: 16px;
+  font-size: 13px;
   color: #9da0a6;
 }
 
 .userCurentChatMess {
   margin-left: 10px;
+  color: white;
+}
+
+.userCurentChatName {
+  color: white;
 }

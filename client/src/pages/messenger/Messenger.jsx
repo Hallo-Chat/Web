@@ -1,25 +1,32 @@
-import Conversation from "../../components/conversations/Conversation"
-import Messenge from "../../components/message/Messenge"
-import ChatOnline from "../../components/chatOnline/ChatOnline"
-import PermContactCalendarIcon from '@mui/icons-material/PermContactCalendar';
-import Topbar from "../../components/topbar/Topbar"
-import SettingsIcon from '@mui/icons-material/Settings';
+import AttachFileIcon from '@mui/icons-material/AttachFile';
+import { AiOutlineFileImage } from "react-icons/ai";
+import { BsChatText } from "react-icons/bs";
+import { IoCallOutline } from "react-icons/io5";
+import { RiContactsBook2Line } from "react-icons/ri";
+import GifIcon from '@mui/icons-material/Gif';
+import SendIcon from '@mui/icons-material/Send';
 import SearchIcon from '@mui/icons-material/Search';
-import "./messenger.scss"
-import { Col } from 'antd';
-import { UserAddOutlined, UsergroupAddOutlined } from '@ant-design/icons';
-import { useContext, useEffect, useState } from "react"
-import { AuthContext } from "../../context/AuthContext"
-import axios from "axios"
-import { useRef } from "react"
-import { io } from "socket.io-client"
-import NavigationChat from "../../features/Chat/components/NavigationChat/NavigationChat";
+import { Col, Carousel } from 'antd';
+import axios from "axios";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import InputEmoji from "react-input-emoji";
+import { io } from "socket.io-client";
+import Conversation from "../../components/conversations/Conversation";
+import Messenge from "../../components/message/Messenge";
+import Topbar from "../../components/topbar/Topbar";
+import { AuthContext } from "../../context/AuthContext";
+import "./messenger.scss";
+import { GiphyFetch } from "@giphy/js-fetch-api";
+import { Grid } from "@giphy/react-components";
+import Profile from "../profile/Profile"
+import Dropzone from 'react-dropzone'
+
 
 export default function Messenger() {
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
+  const [showGif, setShowGif] = useState(false);
   const [conversations, setConversations] = useState([]);
   const [currentChat, setCurrentChat] = useState(null);
-  const [userChat, setUserChat] = useState(null);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [arrivalMessage, setArrivalMessage] = useState(null);
@@ -28,6 +35,99 @@ export default function Messenger() {
   const { user } = useContext(AuthContext);
   const scrollRef = useRef();
 
+  // const giphyFetch = new GiphyFetch("sXpGFDGZs0Dv1mmNFvYaGUvYwKX0PWIh");
+  // const fetchGifs = (number) => {
+  //   console.log("fun called");
+  //   return giphyFetch.search(keyword, { limit: number });
+  // };
+
+
+  const onDrop = async (files) => {
+    let formData = new FormData();
+    const config = {
+      header: { 'content-type': 'multipart/form-data' }
+    }
+    formData.append("file", files[0])
+    const fileUpLoad = await axios.post("/messages/uploadfile", formData, config)
+      .then(res => res);
+
+    if (fileUpLoad.data.success) {
+      var sub = fileUpLoad.data.url;
+      let subRe = sub.substring(14, sub.length);
+      let subMain = subRe.replace(/\\/g, "/");
+      const messLoadFile = {
+        sender: user._id,
+        text: subMain,
+        conversationsId: currentChat._id,
+        type: 'VideoOrImageOrGif',
+      };
+
+      const receiverId = currentChat.members.find(
+        (member) => member !== user._id,
+      );
+
+      socket.current.emit("sendMessage", {
+        senderId: user._id,
+        receiverId,
+        text: subMain,
+      });
+
+      try {
+        const res = await axios.post("/messages", messLoadFile);
+        setMessages([...messages, res.data]);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  }
+  // GIF handle
+  const [keyword, setkeyword] = useState('')
+  const giphyFetch = new GiphyFetch('sXpGFDGZs0Dv1mmNFvYaGUvYwKX0PWIh')
+  const fetchGifs = () => {
+    giphyFetch.trending({ limit: 10 })
+    if (keyword === '') {
+      return giphyFetch.trending({ limit: 20 })
+    }
+    return giphyFetch.search(keyword, { limit: 20 })
+  }
+
+  const onSearch = (value) => setkeyword(value)
+
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const handleClickGif = () => {
+    setShowGif(val => !val);
+  };
+
+  //send Gif
+  const handleClose = async (e) => {
+    let strGif = e.images.preview_gif.url;
+    let gifMain = strGif.replace(/\\/g, "/");
+    const messageGif = {
+      sender: user._id,
+      text: gifMain,
+      conversationsId: currentChat._id,
+      type: 'VideoOrImage',
+    };
+
+    const receiverId = currentChat.members.find(
+      (member) => member !== user._id,
+    );
+
+    socket.current.emit("sendMessage", {
+      senderId: user._id,
+      receiverId,
+      text: gifMain,
+    });
+
+    try {
+      const res = await axios.post("/messages", messageGif);
+      setMessages([...messages, res.data]);
+    } catch (err) {
+      console.log(err);
+    }
+    setShowGif(false);
+  };
 
   useEffect(() => {
     socket.current = io("http://localhost:8900");
@@ -80,14 +180,21 @@ export default function Messenger() {
     getMessages();
   }, [currentChat]);
 
+  // const handleClickGif = event => {
+  //   setShowGif(val => !val);
+  // };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const message = {
       sender: user._id,
       text: newMessage,
       conversationsId: currentChat._id,
+      type: 'Text',
     };
-
+    if (message.text === "") {
+      return;
+    }
     const receiverId = currentChat.members.find(
       (member) => member !== user._id,
     );
@@ -100,6 +207,7 @@ export default function Messenger() {
     try {
       const res = await axios.post("/messages", message);
       setMessages([...messages, res.data]);
+      console.log("send:", res.data);
       setNewMessage("");
     } catch (err) {
       console.log(err);
@@ -114,22 +222,34 @@ export default function Messenger() {
     <>
       <div id="messenger">
         <div className="chatMenu">
+          <div className="chatMenuProfile">
+            <div className="profile">
+              <div className="iconMenuBottom_setting">
+                <Profile />
+              </div>
+            </div>
+          </div>
           <div className="chatMenuWrapper">
-            {/* <input placeholder="Search for friends" className="chatMenuInput" /> */}
             <div className="search-top">
               <div className="searchbars">
                 <SearchIcon className="icon-search" />
-                <input type="text" className="searchInputs" placeholder="Search Friend" />
-              </div>
-              <div className="search-top_add-friend">
-                <UserAddOutlined />
-              </div>
-
-              <div className="search-top_create-group">
-                <UsergroupAddOutlined />
+                <input type="text" className="searchInputs" placeholder="People, groups, messages" />
               </div>
             </div>
-
+            <div className="containerMenu">
+              <div className="containerChat">
+                <BsChatText className="iconChat" style={{ fontSize: "22px" }} />
+                <p style={{ fontSize: "11px", marginLeft: "-1px" }}>Chats</p>
+              </div>
+              <div className="containerCall">
+                <IoCallOutline className="iconCall" style={{ fontSize: "22px" }} />
+                <p style={{ fontSize: "11px" }}>Calls</p>
+              </div>
+              <div className="containerContact">
+                <RiContactsBook2Line className="iconContact" style={{ fontSize: "22px" }} />
+                <p style={{ fontSize: "11px", marginLeft: "-9px" }}>Contacts</p>
+              </div>
+            </div>
             {conversations.map(c => (
               <div onClick={() => { setCurrentChat(c) }}>
                 {
@@ -138,16 +258,19 @@ export default function Messenger() {
               </div>
             ))}
           </div>
-          <div className="menuBottom">
+          {/* <div className="menuBottom">
             <div className="iconMenuBottom">
-              <div className="iconMenuBottom_setting">
-                <SettingsIcon style={{ fontSize: 35 }} />
-              </div>
               <div className="iconMenuBottom_contact">
-                <PermContactCalendarIcon style={{ fontSize: 35 }} />
+                <PermContactCalendarIcon style={{ fontSize: 30 }} />
+              </div>
+              <div className="iconMenuBottom_addMessChat">
+                <PersonAddAltRoundedIcon style={{ fontSize: 30 }} />
+              </div>
+              <div className="iconMenuBottom_addGroup">
+                <GroupAddIcon style={{ fontSize: 30 }} />
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
         <div className="chatBox">
           <div className="chatBoxWrapper">
@@ -164,18 +287,67 @@ export default function Messenger() {
                       </div>
                     ))}
                   </div>
-                  <div className="navigationChats">
-                    {/* <NavigationChat /> */}
-                  </div>
                   <div className="chatBoxBottom">
-                    <input className="chatMessageInput" placeholder="Write something..." onChange={(e) => setNewMessage(e.target.value)} value={newMessage}></input>
-                    <button className="chatSubmitButton" onClick={handleSubmit}>Send</button>
+                    {/* <input className="chatMessageInput" placeholder={"Write something send to " + user.username} onChange={(e) => setNewMessage(e.target.value)} value={newMessage}></input> */}
+                    <InputEmoji
+                      value={newMessage}
+                      onChange={setNewMessage}
+                      cleanOnEnter
+                      onEnter={handleSubmit}
+                      placeholder="Type a message"
+                    />
+                    <div className="navigationChats">
+                      <div className="iconMenuBottom_insertImage">
+                        {/* <AiOutlineFileImage style={{ fontSize: 24 }} />
+                         */}
+                        <Dropzone onDrop={onDrop}>
+                          {({ getRootProps, getInputProps }) => (
+                            <section>
+                              <div {...getRootProps()}>
+                                <input {...getInputProps()} />
+                                <AiOutlineFileImage style={{ fontSize: 24 }} />
+                              </div>
+                            </section>
+                          )}
+                        </Dropzone>
+                      </div>
+                    </div>
+                    <div className="gif">
+                      {showGif && (
+                        <div className="gifStyle">
+                          <img src={PF + "logo.gif"} width="150" />
+                          <input
+                            style={{
+                              marginBottom: 9, width: 120, marginLeft:
+                                15
+                            }}
+                            value={keyword}
+                            type="text"
+                            onChange={e => setkeyword(e.target.value)}
+                          />
+                          <Grid
+                            width={350}
+                            columns={2}
+                            gutter={6}
+                            height={350}
+                            fetchGifs={fetchGifs}
+                            onGifClick={handleClose}
+                            key={keyword}
+                            noLink
+                          />
+                        </div>
+                      )}
+                    </div>
+                    <GifIcon style={{ fontSize: 36 }} onClick={handleClickGif} />
+                    <button className="chatSubmitButton" onClick={handleSubmit}>
+                      <SendIcon style={{ fontSize: 30 }} />
+                    </button>
                   </div>
                 </>
               ) : (
 
                 <Col
-                  span={18}
+                  span={48}
                   xl={{ span: 18 }}
                   lg={{ span: 18 }}
                   md={{ span: 17 }}
@@ -199,18 +371,37 @@ export default function Messenger() {
                         </span>
                       </div>
                     </div>
-
-                    <div className="carousel-slider">
+                    {/* <div className="slideTop">
+                      <Carousel autoplay>
+                        <div className="slide">
+                          <img src={PF + "slise/slise1.png"} width="80" />
+                        </div>
+                        <div className="slide">
+                          <img src={PF + "slise/slise2.png"} />
+                        </div>
+                        <div className="slide">
+                          <img src={PF + "slise/slise3.svg"} />
+                        </div>
+                        <div className="slide">
+                          <img src={PF + "slise/slise4.jpg"} />
+                        </div>
+                      </Carousel>
+                    </div> */}
+                    {/* <div className="carousel-slider">
                       <img width="65%" src={PF + "slise/slise1.png"} />
-                    </div>
+                    </div> */}
                   </div>
                 </Col>
               )}
           </div>
         </div>
         <div className="chatOnline">
-          <div className="chatOnlineWrapper">
-            <ChatOnline onlineUsers={onlineUsers} currentId={user._id} setCurrentChat={setCurrentChat} />
+          <div className="chatRightWrapper">
+            {/* <ChatOnline onlineUsers={onlineUsers} currentId={user._id} setCurrentChat={setCurrentChat} /> */}
+            <div className="chatRightTop">
+              <h3>GALLERY</h3>
+            </div>
+            <div className="chatRightBottom"></div>
           </div>
         </div>
       </div>

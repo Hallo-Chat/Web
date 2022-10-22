@@ -37,7 +37,6 @@ export default function Conversation({ conversation, currentUser }) {
           <span className="conversationName">{user?.username}</span>
         </div>
         <div className="conversationMess">
-          <span className="userCurentChatName">You:</span>
           <span className="userCurentChatMess">Are you OK?</span>
         </div>
         <span className="conversationTime">{format(user?.createdAt)}</span>

@@ -1,4 +1,4 @@
-.profile{
+/* .profile{
     display: flex;
 }
 
@@ -47,4 +47,39 @@
 
 .profileRightBottom{
     display: flex;
+} */
+
+.profileContent {
+  display: flex;
+}
+
+.imageProfile {
+  position: relative;
+}
+
+.profileUserImg {
+  margin-left: 5px;
+  margin-top: 15px;
+}
+
+.chatOnlineBadgeProfile {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: limeGreen;
+  position: absolute;
+  right: 2px;
+  top: 45px;
+}
+
+.titleProfile {
+  margin-top: 15px;
+  margin-left: 10px;
+}
+
+.titleProfile > p {
+  font-weight: 350;
+  font-size: 12px;
+  margin-top: 5px;
+  margin-left: 2px;
 }

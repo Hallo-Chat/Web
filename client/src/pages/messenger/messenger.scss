@@ -10,8 +10,18 @@
 
 .chatMenu {
   flex: 2.5;
-  background-color: #0048aa;
-  color: #fff;
+  background-color: white;
+  color: #42454b;
+}
+
+.chatMenuProfile {
+  height: 10%;
+  background-color: white;
+}
+
+.iconMenuBottom_setting {
+  margin-top: -15px;
+  margin-left: -5px;
 }
 
 .search-top {
@@ -37,11 +47,6 @@
     transition: 0.2s;
   }
 
-  &_add-friend:hover,
-  &_create-group:hover {
-    background-color: #c1c1c1;
-  }
-
   &_input-search {
     flex-grow: 1;
     border: 1px solid black;
@@ -52,15 +57,16 @@
 
 .searchbars {
   width: 100%;
-  height: 30px;
-  background-color: #c1c1c1;
-  border-radius: 5px;
+  height: 35px;
+  background-color: #f1f1f4;
+  border-radius: 15px;
   display: flex;
   align-items: center;
+  margin-top: -10px;
 }
 
 .searchbars:hover {
-  box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
+  box-shadow: rgb(38, 57, 77) 5px 10px 10px -15px;
 }
 
 .icon-search {
@@ -70,9 +76,9 @@
 
 .searchInputs {
   border: none;
-  width: 75%;
+  width: 10%;
   padding-left: 5px;
-  background-color: #c1c1c1;
+  background-color: #f1f1f4;
 }
 
 .searchInputs:hover {
@@ -82,9 +88,9 @@
   background-color: white;
 }
 .searchInputs {
-  height: 95%;
+  height: 94%;
   width: 100%;
-  border-radius: 0px 5px 5px 0px;
+  border-radius: 0px 15px 15px 0px;
   outline: none;
 }
 .searchbars:hover {
@@ -94,6 +100,26 @@
   outline: none;
 }
 
+.containerMenu {
+  height: 50px;
+  margin-top: -15px;
+  color: #6a6b6f;
+  .containerChat,
+  .containerCall,
+  .containerContact {
+    margin-left: 70px;
+  }
+  .containerChat {
+    margin-left: 70px;
+  }
+
+  .iconChat:hover,
+  .iconCall:hover,
+  .iconContact:hover {
+    color: black;
+  }
+}
+
 .chatMenuInput {
   width: 100%;
   padding: 10px 0px;
@@ -101,15 +127,23 @@
   border-bottom: 1px solid gray;
 }
 
+.containerMenu {
+  display: flex;
+}
+
 .chatBox {
   flex: 6;
+  box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 10px, rgba(0, 0, 0, 0.23) 0px 3px 3px;
 }
 
 .chatBoxTop {
   overflow-y: scroll;
+  overflow-x: hidden;
   padding-right: 10px;
   margin-left: 10px;
-  height: 570px;
+  height: 565px;
+  margin-right: 4px;
+  margin-bottom: 10px;
 }
 .chatBoxTop::-webkit-scrollbar-thumb {
   background-image: linear-gradient(-45deg, #6a5af9, #d66efd);
@@ -123,12 +157,23 @@
 }
 
 .chatBoxBottom {
+  display: block;
   margin-top: 5px;
   display: flex;
   width: 100%;
-  border-top: 1px solid #0091ff;
   align-items: center;
   justify-self: space-between;
+}
+
+.gifStyle {
+  background-color: black;
+  position: absolute;
+  height: 350px;
+  right: 55px;
+  bottom: 10%;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  padding: 10px;
 }
 
 .chatMessageInput {
@@ -144,13 +189,12 @@
 }
 
 .chatSubmitButton {
-  width: 70px;
-  height: 40px;
+  margin-right: 10px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  background-color: teal;
-  color: white;
+  background-color: transparent;
+  color: #0091ff;
 }
 
 .chatOnlineWrapper {
@@ -163,6 +207,10 @@
 
 .chatBoxWrapper {
   padding: 0px;
+}
+
+.navigationChats {
+  display: flex;
 }
 
 .noConversationText {
@@ -203,29 +251,34 @@
 
 .chatOnline {
   flex: 2.3;
+  border-left: 1px solid #c1c1c1;
   background-color: #f9f9fd;
 }
 
-.navigationChats {
-}
-
-.menuBottom {
-  z-index: 400;
-  height: 70px;
-  width: 354.5px;
+.showPickers {
   position: absolute;
-  bottom: 0;
+  bottom: 30;
 }
 
-.iconMenuBottom {
+.NavigationChat {
+  position: relative;
   display: flex;
-  margin: 20px;
-  margin-left: 140px;
+  margin-top: 10px;
 }
 
-.iconMenuBottom_setting,
-.iconMenuBottom_contact {
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
+.iconMenuBottom_emoji,
+.iconMenuBottom_insertImage {
+  color: gray;
+}
+
+.iconMenuBottom_insertFile {
+  margin-left: 5px;
+}
+
+.chatRightWrapper {
+  .chatRightTop {
+    height: 70px;
+    text-align: center;
+    margin-top: 10%;
+  }
 }

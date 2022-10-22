@@ -9,10 +9,13 @@ const MessageSchema = new mongoose.Schema(
             type: String,
         },
         text: {
-            type: String,   
+            type: String,
+        },
+        type: {
+            type: String,
         }
     },
-    {timestamps: true}
+    { timestamps: true }
 );
 
 module.exports = mongoose.model('Message', MessageSchema);

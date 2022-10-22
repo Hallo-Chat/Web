@@ -1,0 +1,75 @@
+.messenge {
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  margin-top: 20px;
+  .emojiStatusTemp {
+    visibility: hidden;
+  }
+  .imageMess,
+  .imageGif {
+    border-radius: 15px 15px 15px 0px;
+  }
+}
+
+// { fontSize: "20px", marginTop: "10px", marginLeft: "10px" }
+.messengeTop {
+  display: flex;
+}
+
+.videoMess video {
+  border-radius: 15px 15px 15px 0px;
+}
+
+.messengeImg {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 10px;
+}
+
+.messengeText {
+  padding: 10px;
+  max-width: 400px;
+  border-radius: 20px 20px 20px 0px;
+  background-color: #eeeeee;
+}
+
+.messengeBottom {
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+.messenge.own {
+  align-items: flex-end;
+  .emojiStatusTemp {
+    visibility: visible;
+  }
+  .emojiStatus {
+    display: none;
+  }
+  .videoMess video {
+    border-radius: 15px 15px 0px 15px;
+  }
+  image {
+    border-radius: 15px 15px 0px 15px;
+  }
+}
+
+.messenge.own .messengeText {
+  background-color: #144ba8;
+  color: white;
+  border-radius: 20px 20px 0px 20px;
+}
+
+.messenge.own .imageChat {
+  display: none;
+}
+.messenge.own .nameTime {
+  text-align: right;
+  .imageMess,
+  .imageGif {
+    border-radius: 15px 15px 0px 15px;
+  }
+}

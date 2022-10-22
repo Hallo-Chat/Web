@@ -17,9 +17,9 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route exact path="/" element={user ? <Home /> : <Register />} />
-        <Route path="/login" element={user ? <Navigate to="/" /> : <Login />} />
-        <Route path="/messenger" element={!user ? <Navigate to="/" /> : <Messenger />} />
+        <Route exact path="/" element={user ? <Messenger /> : <Login />} />
+        <Route path="/login" element={user ? <Navigate to="/" /> : <Register />} />
+        {/* <Route path="/messenger" element={!user ? <Navigate to="/" /> : <Messenger />} /> */}
         <Route path="/register" element={user ? <Navigate to="/" /> : <Register />} />
         <Route path="/profile/:username" element={<Profile />} />
       </Routes>

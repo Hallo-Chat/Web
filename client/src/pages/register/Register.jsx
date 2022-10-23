@@ -45,8 +45,8 @@ export default function Register() {
             <input type="Password" className="loginInput" minLength="6" required ref={password} placeholder="Password" />
             <input type="Password" className="loginInput" minLength="6" required ref={passwordAgain} placeholder="Password Again" />
             <button className="loginButton" type="submit">Sign Up</button>
-            <Link to="/login">
-              <button className="loginRegisterButton">Log into Account</button>
+            <Link to="/">
+              <button className="loginRegisterButton">Login into Account</button>
             </Link>
           </form>
         </div>

@@ -1,12 +1,24 @@
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import { AiOutlineFileImage } from "react-icons/ai";
 import { BsChatText } from "react-icons/bs";
+import { IoVideocam } from "react-icons/io5";
 import { IoCallOutline } from "react-icons/io5";
+import { BsImage } from "react-icons/bs";
 import { RiContactsBook2Line } from "react-icons/ri";
+import { HiOutlineUserGroup } from "react-icons/hi";
 import GifIcon from '@mui/icons-material/Gif';
 import SendIcon from '@mui/icons-material/Send';
 import SearchIcon from '@mui/icons-material/Search';
-import { Col, Carousel } from 'antd';
+import { Col, Carousel, Card, Button, Menu } from 'antd';
+import {
+  AppstoreOutlined,
+  ContainerOutlined,
+  DesktopOutlined,
+  MailOutlined,
+  MenuFoldOutlined,
+  MenuUnfoldOutlined,
+  PieChartOutlined,
+} from '@ant-design/icons';
 import axios from "axios";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import InputEmoji from "react-input-emoji";
@@ -16,6 +28,7 @@ import Messenge from "../../components/message/Messenge";
 import Topbar from "../../components/topbar/Topbar";
 import { AuthContext } from "../../context/AuthContext";
 import "./messenger.scss";
+import 'antd/dist/antd.css';
 import { GiphyFetch } from "@giphy/js-fetch-api";
 import { Grid } from "@giphy/react-components";
 import Profile from "../profile/Profile"
@@ -35,12 +48,41 @@ export default function Messenger() {
   const { user } = useContext(AuthContext);
   const scrollRef = useRef();
 
-  // const giphyFetch = new GiphyFetch("sXpGFDGZs0Dv1mmNFvYaGUvYwKX0PWIh");
-  // const fetchGifs = (number) => {
-  //   console.log("fun called");
-  //   return giphyFetch.search(keyword, { limit: number });
-  // };
+  //MenuRight
+  function getItem(label, key, icon, children, type) {
+    return {
+      key,
+      icon,
+      children,
+      label,
+      type,
+    };
+  }
+  const items = [
+    getItem('Add group chat', '1', <HiOutlineUserGroup />),
+    // getItem('Option 2', '2', <DesktopOutlined />),
+    // getItem('Option 3', '3', <ContainerOutlined />),
+    getItem('Media', 'sub1', <BsImage />, [
+      getItem('Option 5', '5'),
+      getItem('Option 6', '6'),
+      getItem('Option 7', '7'),
+      getItem('Option 8', '8'),
+    ]),
+    getItem('Video', 'sub2', <IoVideocam />, [
+      getItem('Option 9', '9'),
+      getItem('Option 10', '10'),
+      getItem('Submenu', 'sub3', null, [getItem('Option 11', '11'), getItem('Option 12', '12')]),
+    ]),
+  ];
 
+  const [collapsed, setCollapsed] = useState(false);
+  const toggleCollapsed = () => {
+    setCollapsed(!collapsed);
+  };
+
+  // End menu right
+
+  const statusChatOnline = conversations._id;
 
   const onDrop = async (files) => {
     let formData = new FormData();
@@ -139,6 +181,9 @@ export default function Messenger() {
         createdAt: Date.now(),
       });
     });
+    socket.current.on('getTyping', (data) => {
+      console.log(data)
+    })
   }, []);
 
   useEffect(() => {
@@ -184,8 +229,20 @@ export default function Messenger() {
   //   setShowGif(val => !val);
   // };
 
+  const inputHander = (e) => {
+    const receiverId = currentChat.members.find(
+      (member) => member !== user._id,
+    );
+    setNewMessage(e);
+    socket.current.emit('typingMessenger', {
+      senderId: user.id,
+      receiverId,
+      text: newMessage,
+    })
+  }
+
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    // e.preventDefault();
     const message = {
       sender: user._id,
       text: newMessage,
@@ -198,12 +255,13 @@ export default function Messenger() {
     const receiverId = currentChat.members.find(
       (member) => member !== user._id,
     );
+
     socket.current.emit("sendMessage", {
       senderId: user._id,
       receiverId,
       text: newMessage,
     });
-
+    console.log("Da gui!!!");
     try {
       const res = await axios.post("/messages", message);
       setMessages([...messages, res.data]);
@@ -291,7 +349,7 @@ export default function Messenger() {
                     {/* <input className="chatMessageInput" placeholder={"Write something send to " + user.username} onChange={(e) => setNewMessage(e.target.value)} value={newMessage}></input> */}
                     <InputEmoji
                       value={newMessage}
-                      onChange={setNewMessage}
+                      onChange={inputHander}
                       cleanOnEnter
                       onEnter={handleSubmit}
                       placeholder="Type a message"
@@ -371,22 +429,31 @@ export default function Messenger() {
                         </span>
                       </div>
                     </div>
-                    {/* <div className="slideTop">
+                    <div className="slideTop">
                       <Carousel autoplay>
-                        <div className="slide">
-                          <img src={PF + "slise/slise1.png"} width="80" />
-                        </div>
-                        <div className="slide">
+                        <Card>
+                          <img src={PF + "slise/slise1.png"} />
+                        </Card>
+                        <Card>
                           <img src={PF + "slise/slise2.png"} />
-                        </div>
-                        <div className="slide">
-                          <img src={PF + "slise/slise3.svg"} />
-                        </div>
-                        <div className="slide">
-                          <img src={PF + "slise/slise4.jpg"} />
-                        </div>
+                        </Card>
+                        <Card>
+                          <img src={PF + "slise/slise3.jpg"} />
+                        </Card>
+                        <Card>
+                          <img src={PF + "slise/slide4.jpg"} />
+                        </Card>
+                        <Card>
+                          <img src={PF + "slise/slise5.png"} />
+                        </Card>
+                        <Card>
+                          <img src={PF + "slise/slise6.jpg"} />
+                        </Card>
+                        <Card>
+                          <img src={PF + "slise/slide4.jpg"} />
+                        </Card>
                       </Carousel>
-                    </div> */}
+                    </div>
                     {/* <div className="carousel-slider">
                       <img width="65%" src={PF + "slise/slise1.png"} />
                     </div> */}
@@ -395,15 +462,47 @@ export default function Messenger() {
               )}
           </div>
         </div>
-        <div className="chatOnline">
-          <div className="chatRightWrapper">
-            {/* <ChatOnline onlineUsers={onlineUsers} currentId={user._id} setCurrentChat={setCurrentChat} /> */}
-            <div className="chatRightTop">
-              <h3>GALLERY</h3>
-            </div>
-            <div className="chatRightBottom"></div>
-          </div>
-        </div>
+        {
+          currentChat ? (
+            <>
+              <div className="chatOnline">
+                <div className="chatRightWrapper">
+                  {/* <ChatOnline onlineUsers={onlineUsers} currentId={user._id} setCurrentChat={setCurrentChat} /> */}
+                  <div className="chatRightTop">
+                    <div className="menuRight">
+                      <div
+                        style={{
+                          width: "auto",
+                        }}
+                      >
+                        <Button
+                          type="primary"
+                          onClick={toggleCollapsed}
+                          style={{
+                            marginBottom: 16,
+                            marginTop: 12,
+                          }}
+                        >
+                          {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+                        </Button>
+                        <Menu
+                          defaultSelectedKeys={['1']}
+                          defaultOpenKeys={['sub1']}
+                          mode="inline"
+                          theme="white"
+                          inlineCollapsed={collapsed}
+                          items={items}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="chatRightBottom"></div>
+                </div>
+              </div>
+            </>
+          ) : (
+            <div />
+          )}
       </div>
     </>
   )

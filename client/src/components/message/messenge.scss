@@ -1,7 +1,6 @@
 .messenge {
   display: flex;
   flex-direction: column;
-  background-color: white;
   margin-top: 20px;
   .emojiStatusTemp {
     visibility: hidden;
@@ -34,6 +33,7 @@
   max-width: 400px;
   border-radius: 20px 20px 20px 0px;
   background-color: #eeeeee;
+  font-size: 16px;
 }
 
 .messengeBottom {
@@ -58,8 +58,8 @@
 }
 
 .messenge.own .messengeText {
-  background-color: #144ba8;
-  color: white;
+  background-color: #d0def3;
+  color: black;
   border-radius: 20px 20px 0px 20px;
 }
 
@@ -71,5 +71,30 @@
   .imageMess,
   .imageGif {
     border-radius: 15px 15px 0px 15px;
+  }
+}
+
+.fileUpload {
+  background-color: #d0def3;
+  padding: 10px;
+  max-width: 400px;
+  border-radius: 20px 20px 20px 0px;
+  display: flex;
+  .imgDoc {
+    flex: 2;
+  }
+  .titleFile {
+    flex: 6;
+    color: white;
+  }
+  .fileUpload .titleFile {
+    margin: 5px;
+  }
+  .downloadIcon {
+    flex: 2;
+    text-align: center;
+    .iconDowLoad:hover {
+      pointer-events: none !important;
+    }
   }
 }

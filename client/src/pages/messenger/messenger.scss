@@ -9,7 +9,8 @@
 }
 
 .chatMenu {
-  flex: 2.5;
+  flex: 2;
+  display: block;
   background-color: white;
   color: #42454b;
 }
@@ -103,14 +104,16 @@
 .containerMenu {
   height: 50px;
   margin-top: -15px;
+  margin-right: 20px;
   color: #6a6b6f;
+  text-align: center;
   .containerChat,
   .containerCall,
   .containerContact {
-    margin-left: 70px;
+    margin: auto;
   }
   .containerChat {
-    margin-left: 70px;
+    margin: auto;
   }
 
   .iconChat:hover,
@@ -132,6 +135,7 @@
 }
 
 .chatBox {
+  z-index: 200;
   flex: 6;
   box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 10px, rgba(0, 0, 0, 0.23) 0px 3px 3px;
 }
@@ -143,6 +147,7 @@
   margin-left: 10px;
   height: 565px;
   margin-right: 4px;
+  margin-top: 8px;
   margin-bottom: 10px;
 }
 .chatBoxTop::-webkit-scrollbar-thumb {
@@ -154,6 +159,21 @@
   flex-direction: column;
   justify-content: space-between;
   position: relative;
+}
+
+.slideTop {
+  max-width: 700px;
+  max-height: 700px;
+  margin-top: 50px;
+  margin-left: 20px;
+  img {
+    max-width: 100%;
+    max-height: 100%;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    width: 500px;
+  }
 }
 
 .chatBoxBottom {
@@ -222,19 +242,18 @@
   cursor: default;
 }
 
+.containerSlider {
+  display: flex;
+}
+
 .landing-app {
   padding: 8% 0;
+  padding-left: 220px;
+  text-align: center;
   .title-welcome {
-    width: 60%;
-    display: flex;
-    margin-left: 200px;
-    justify-content: center;
-
-    align-items: center;
     flex-direction: column;
     &-heading {
-      font-size: 22px;
-      font-weight: 500;
+      font-size: 24px;
       margin-bottom: 2rem;
     }
 
@@ -250,9 +269,10 @@
 }
 
 .chatOnline {
-  flex: 2.3;
+  width: auto;
   border-left: 1px solid #c1c1c1;
   background-color: #f9f9fd;
+  z-index: 100;
 }
 
 .showPickers {
@@ -277,8 +297,12 @@
 
 .chatRightWrapper {
   .chatRightTop {
+    width: auto;
     height: 70px;
     text-align: center;
-    margin-top: 10%;
+    margin-top: 5%;
   }
+}
+
+.menuRight {
 }

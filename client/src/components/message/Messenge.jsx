@@ -1,14 +1,29 @@
 import "./messenge.scss"
+import axios from "axios";
 import { format } from "timeago.js";
 import { CiFaceSmile } from "react-icons/ci";
 import { BiDotsHorizontalRounded } from "react-icons/bi";
 import { AiOutlineDownload } from "react-icons/ai";
 import { AiFillFileWord } from "react-icons/ai";
+import { useEffect, useState } from "react";
 import { Image } from 'antd';
 import { Link } from "react-router-dom";
 
 export default function Messenge({ message, own }) {
     const PF = process.env.REACT_APP_PUBLIC_FOLDER;
+    const [sender, setSender] = useState(null);
+    useEffect(() => {
+        const getSender = async () => {
+            try {
+                const res = await axios("/user?userId=" + message.sender);
+                setSender(res.data);
+            } catch (err) {
+                console.log(err);
+            }
+        };
+        getSender();
+    }, [message]);
+    console.log(sender);
     return (
         <div className={own ? "messenge own" : "messenge"}>
             <div className="messengeTop">
@@ -16,7 +31,7 @@ export default function Messenge({ message, own }) {
                     <BiDotsHorizontalRounded className="iConEmojiTemp" style={{ fontSize: "20px", marginTop: "10px", marginRight: "3px" }} />
                 </div>
                 <div className="imageChat">
-                    <img className="messengeImg" src={PF + "person/3.jpeg"} alt="" />
+                    <img className="messengeImg" src={PF + sender?.profilePicture} alt="avatar" />
                 </div>
                 <div className="nameTime">
                     <div className="name_emoji">

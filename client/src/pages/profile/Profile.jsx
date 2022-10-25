@@ -78,7 +78,6 @@ export default function AccountMenu() {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
     const handClickLogout = () => {
-        console.log("Test logout");
         window.localStorage.clear();
         window.location.reload();
     }

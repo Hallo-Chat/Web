@@ -1,0 +1,6 @@
+{
+  "appId": "com.huydinh",
+  "appName": "Hallo Chat",
+  "webDir": "build",
+  "bundledWebRuntime": false
+}

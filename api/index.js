@@ -16,7 +16,7 @@ const path = require('path');
 
 db.connect();
 
-app.use("/images", express.static(path.join(__dirname,"public/images")))
+app.use("/images", express.static(path.join(__dirname, "public/images")))
 
 // middleware
 app.use(express.json());
@@ -24,7 +24,7 @@ app.use(helmet());
 app.use(morgan('common'));
 
 const storage = multer.diskStorage({
-    destination:(req, file, cb) => {
+    destination: (req, file, cb) => {
         cb(null, "public/images");
     },
     filename: (req, file, cb) => {
@@ -32,11 +32,11 @@ const storage = multer.diskStorage({
     },
 });
 
-const upload = multer({storage});
+const upload = multer({ storage });
 app.post("/api/upload", upload.single("file"), (req, res) => {
-    try{
+    try {
         return res.status(200).json("File upload successful.");
-    } catch(err){
+    } catch (err) {
         console.log(err);
     }
 });
@@ -51,7 +51,7 @@ app.get("/", (req, res) => {
     res.send("OK");
 })
 
-var server = app.listen(4000,  "127.0.0.1", function () {
+var server = app.listen(4000, "127.0.0.1", function () {
     var host = server.address().address
     var port = server.address().port
     console.log("Example app listening at http://%s:%s", host, port)

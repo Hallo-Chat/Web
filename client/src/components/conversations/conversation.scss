@@ -23,6 +23,17 @@
   margin-left: 10px;
 }
 
+.conversationLstImg {
+  margin-right: -30px;
+  display: flex;
+  .groupAvt1 {
+    flex: 0.2;
+  }
+  .groupAvt2 {
+    flex: 0;
+  }
+}
+
 .conversationName {
   font-weight: 500;
   font-size: 20px;

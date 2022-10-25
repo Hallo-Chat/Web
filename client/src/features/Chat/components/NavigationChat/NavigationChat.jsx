@@ -51,7 +51,6 @@ export default function NavigationChat() {
         outline: 'none',
         border: 'red',
         padding: '0px',
-        borderRadius: '50%',
         fontSize: '2.2rem',
     }
 

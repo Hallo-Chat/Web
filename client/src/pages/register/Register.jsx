@@ -3,6 +3,7 @@ import { useRef } from "react";
 import { loginCall } from "../../apiCalls";
 import "./register.css"
 import { Link, useNavigate } from "react-router-dom"
+import { Redirect } from 'react-router-dom';
 
 export default function Register() {
   const username = useRef();
@@ -11,8 +12,7 @@ export default function Register() {
   const passwordAgain = useRef();
   const history = useNavigate();
 
-  const handleClick = async (e) => {
-    e.preventDefault();
+  const handleClick = async () => {
     if (passwordAgain.current.value !== password.current.value) {
       passwordAgain.current.setCustomValidity("Password don't match !")
     } else {
@@ -23,7 +23,7 @@ export default function Register() {
       }
       try {
         await axios.post("auth/register", user);
-        history.push("/login");
+        history.push("/unRegister");
       }
       catch (err) {
         console.log(err);

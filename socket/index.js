@@ -20,22 +20,46 @@ const getUser = (userId) => {
 };
 
 io.on("connection", (socket) => {
-  //when ceonnect
+  //when connect
   console.log("a user connected.");
   //take userId and socketId from user
   socket.on("addUser", (userId) => {
     addUser(userId, socket.id);
-    io.emit("getUsers", users);
+    // io.emit("getUsers", users);
   });
+  socket.on("joinRoom", (roomName) => {
+    socket.join(roomName);
+  })
   console.log("users", users);
   //send and get message
-  socket.on("sendMessage", ({ senderId, receiverId, text }) => {
-    const user = getUser(receiverId);
-    io.to(user.socketId).emit("getMessage", {
-      senderId,
-      text,
-    });
+  socket.on("sendMessage", ({ senderId, to, text, isGroup }) => {
+    if (isGroup) {
+      io.to(to).emit("getMessageGroup", {
+        senderId,
+        text,
+      });
+    }
+    else {
+      const user = getUser(to);
+      io.to(user.socketId).emit("getMessage", {
+        senderId,
+        text,
+      });
+    }
   });
+
+  // socket.on('join-conversations', (conversationIds) => {
+  //   conversationIds.forEach((id) => socket.join(id));
+  // });
+
+  // socket.on('join-conversation', (conversationId) => {
+  //   socket.join(conversationId);
+  // });
+
+  // socket.on('leave-conversation', (conversationId) => {
+  //   socket.leave(conversationId);
+  // });
+
 
   // socket.on("typingMessenger", ({ senderId, receiverId, text }) => {
   //   const userTyping = getUser(receiverId);

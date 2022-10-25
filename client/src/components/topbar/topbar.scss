@@ -10,16 +10,27 @@
   border-bottom: 1px solid #c1c1c1;
 }
 
+.conversationLstImg {
+  display: flex;
+  .groupAvt1 {
+    flex: 0.2;
+  }
+  .groupAvt2 {
+    flex: 0;
+  }
+}
+
 .topbarLeft {
   flex: 3;
   margin-left: 20px;
   display: flex;
 }
 .timeTop {
+  margin-top: -10px;
 }
 .titleName {
   color: black;
-  margin-left: -30px;
+  margin-left: 10px;
 }
 
 /* .logo {

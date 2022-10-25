@@ -4,6 +4,8 @@ const UserSchema = new mongoose.Schema({
     username: { type: 'string', required: true, min: 3, max: 30, unique: true },
     email: { type: 'string', required: true, max: 50, unique: true },
     password: { type: 'string', required: true, min: 6 },
+    emailToken: { type: 'string', required: true },
+    isVerified: { type: 'boolean' },
     profilePicture: { type: 'string', default: "" },
     coverPicture: { type: 'string', default: "" },
     followers: { type: 'array', default: [] },

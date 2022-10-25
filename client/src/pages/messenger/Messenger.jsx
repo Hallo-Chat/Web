@@ -9,7 +9,7 @@ import { HiOutlineUserGroup } from "react-icons/hi";
 import GifIcon from '@mui/icons-material/Gif';
 import SendIcon from '@mui/icons-material/Send';
 import SearchIcon from '@mui/icons-material/Search';
-import { Col, Carousel, Card, Button, Menu } from 'antd';
+import { Col, Carousel, Card, Button, Menu, Modal, Checkbox } from 'antd';
 import {
   AppstoreOutlined,
   ContainerOutlined,
@@ -28,11 +28,12 @@ import Messenge from "../../components/message/Messenge";
 import Topbar from "../../components/topbar/Topbar";
 import { AuthContext } from "../../context/AuthContext";
 import "./messenger.scss";
-import 'antd/dist/antd.css';
+import 'antd/dist/antd.min.css';
 import { GiphyFetch } from "@giphy/js-fetch-api";
 import { Grid } from "@giphy/react-components";
 import Profile from "../profile/Profile"
 import Dropzone from 'react-dropzone'
+import Rightbar from '../../components/rightbar/Rightbar';
 
 
 export default function Messenger() {
@@ -43,7 +44,11 @@ export default function Messenger() {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [arrivalMessage, setArrivalMessage] = useState(null);
+  const [arrivalMessageGroup, setArrivalMessageGroup] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [onlineUsers, setOnlineUsers] = useState([]);
+  const [addGroup, setAddGroup] = useState([]);
+  const [friends, setFriends] = useState([]);
   const socket = useRef();
   const { user } = useContext(AuthContext);
   const scrollRef = useRef();
@@ -63,15 +68,15 @@ export default function Messenger() {
     // getItem('Option 2', '2', <DesktopOutlined />),
     // getItem('Option 3', '3', <ContainerOutlined />),
     getItem('Media', 'sub1', <BsImage />, [
-      getItem('Option 5', '5'),
-      getItem('Option 6', '6'),
-      getItem('Option 7', '7'),
-      getItem('Option 8', '8'),
+      getItem('List Image', '5'),
+      getItem('List Image', '6'),
+      getItem('List Image', '7'),
+      getItem('List Image', '8'),
     ]),
     getItem('Video', 'sub2', <IoVideocam />, [
-      getItem('Option 9', '9'),
-      getItem('Option 10', '10'),
-      getItem('Submenu', 'sub3', null, [getItem('Option 11', '11'), getItem('Option 12', '12')]),
+      getItem('List Video', '9'),
+      getItem('List Video', '10'),
+      getItem('List Video', 'sub3', null, [getItem('Option 11', '11'), getItem('Option 12', '12')]),
     ]),
   ];
 
@@ -171,11 +176,29 @@ export default function Messenger() {
     setShowGif(false);
   };
 
+  //modal create group message
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
   useEffect(() => {
     socket.current = io("http://localhost:8900");
     socket.current.on("getMessage", (data) => {
-      console.log("get messsage:", data);
+      // console.log("get messsage:", data);
       setArrivalMessage({
+        sender: data.senderId,
+        text: data.text,
+        createdAt: Date.now(),
+      });
+    });
+    socket.current.on("getMessageGroup", (data) => {
+      setArrivalMessageGroup({
         sender: data.senderId,
         text: data.text,
         createdAt: Date.now(),
@@ -188,18 +211,28 @@ export default function Messenger() {
 
   useEffect(() => {
     arrivalMessage &&
-      currentChat?.members.includes(arrivalMessage.sender) &&
+      currentChat?.members.includes(arrivalMessage.sender) && !currentChat.isGroup &&
       setMessages((prev) => [...prev, arrivalMessage]);
   }, [arrivalMessage, currentChat]);
 
   useEffect(() => {
+    arrivalMessageGroup &&
+      currentChat?.members.includes(arrivalMessageGroup.sender) && currentChat.isGroup &&
+      setMessages((prev) => [...prev, arrivalMessageGroup]);
+  }, [arrivalMessageGroup, currentChat]);
+
+  useEffect(() => {
     socket.current.emit("addUser", user._id);
-    socket.current.on("getUsers", (users) => {
-      setOnlineUsers(
-        user.followings.filter((f) => user.some((u) => u.userId === f))
-      );
-    });
+    // socket.current.on("getUsers", (users) => {
+    //   setOnlineUsers(
+    //     user.followings.filter((f) => user.some((u) => u.userId === f))
+    //   );
+    // });
   }, [user]);
+
+  useEffect(() => {
+    socket.current.emit("joinRoom", currentChat?.name);
+  }, [currentChat]);
 
   useEffect(() => {
     const getConversations = async () => {
@@ -241,6 +274,20 @@ export default function Messenger() {
     })
   }
 
+  const modalCreateGroup = (e) => {
+
+  }
+
+  const onChangeCheckBox = (e) => {
+    if (e.target.checked) {
+      setAddGroup(e);
+    }
+    else {
+      // setAddGroup([...e.split(',')]);
+    }
+    console.log(addGroup);
+  };
+
   const handleSubmit = async (e) => {
     // e.preventDefault();
     const message = {
@@ -258,10 +305,11 @@ export default function Messenger() {
 
     socket.current.emit("sendMessage", {
       senderId: user._id,
-      receiverId,
+      // receiverId,
+      to: currentChat.isGroup ? currentChat.name : receiverId,
       text: newMessage,
+      isGroup: currentChat.isGroup,
     });
-    console.log("Da gui!!!");
     try {
       const res = await axios.post("/messages", message);
       setMessages([...messages, res.data]);
@@ -275,6 +323,18 @@ export default function Messenger() {
   useEffect(() => {
     scrollRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
+  useEffect(() => {
+    const getFriends = async () => {
+      try {
+        const friendList = await axios.get("/user/friends/" + user?._id);
+        setFriends(friendList.data);
+      } catch (err) {
+        console.log(err)
+      }
+    };
+    getFriends();
+  }, [user])
 
   return (
     <>
@@ -292,6 +352,40 @@ export default function Messenger() {
               <div className="searchbars">
                 <SearchIcon className="icon-search" />
                 <input type="text" className="searchInputs" placeholder="People, groups, messages" />
+              </div>
+              <div className="createGroup" >
+                <HiOutlineUserGroup className="iConCreateGroup" style={{ fontSize: "22px" }} onClick={showModal} />
+              </div>
+              <div className="showModalCreateGroup">
+                <>
+                  <Modal title="Create Group" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+                    <div className="searchbars">
+                      <SearchIcon className="icon-search" />
+                      <input type="text" className="searchInputs" placeholder="Search friend" />
+                    </div>
+                    <div className="contenFriend">
+                      <h3 style={{ margin: "10px" }}>List Friend</h3>
+                      <div className="listFriend">
+                        {/* <Rightbar user={user} /> */}
+                        <ul className="rightbarFriendList">
+                          {friends.map(u => (
+                            <li className="rightbarFriend">
+                              <div className="rightbarProfileImgContainer">
+                                <img className="rightbarProfileImg" src={PF + u.profilePicture} alt="" />
+                              </div>
+                              <span className="rightbarUsername">
+                                {u.username}
+                              </span>
+                              <div className="checkBoxFri">
+                                <Checkbox onChange={onChangeCheckBox} value={u}></Checkbox>
+                              </div>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                  </Modal>
+                </>
               </div>
             </div>
             <div className="containerMenu">

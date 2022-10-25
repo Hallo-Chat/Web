@@ -1,9 +1,10 @@
-import "./topbar.css"
+import "./topbar.scss"
 import SearchIcon from '@mui/icons-material/Search';
 import PersonIcon from '@mui/icons-material/Person';
 import ChatIcon from '@mui/icons-material/Chat';
 import PhoneIcon from '@mui/icons-material/Phone';
 import DuoIcon from '@mui/icons-material/Duo';
+import { Avatar, Badge, Tooltip } from 'antd';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { Link } from "react-router-dom"
 import { AuthContext } from "../../context/AuthContext";
@@ -38,10 +39,73 @@ export default function Topbar({ currentChat }) {
             <div className="topbarContainer">
                 <div className="topbarLeft">
                     <Link to={`/profile/${friendInfo.username}`}>
-                        <img src={friendInfo.profilePicture ? PF + friendInfo.profilePicture : PF + "person/noAvatar.png"} alt="" className="topbarImg" />
+                        {
+                            currentChat.avatar == '' && currentChat.isGroup ?
+                                (<Avatar.Group
+                                    className="conversationLstImg"
+                                    maxCount={2}
+                                    size="small"
+                                    maxStyle={{
+                                        color: '#f56a00',
+                                        backgroundColor: '#fde3cf',
+                                        cursor: 'pointer',
+                                    }}
+                                >
+                                    <div className="groupAvt1">
+                                        <Avatar
+                                            style={{
+                                                backgroundColor: '#f56a00',
+                                                marginLeft: "0.01px"
+                                            }}
+                                        >
+                                            G
+                                        </Avatar>
+                                        <Avatar
+                                            style={{
+                                                backgroundColor: '#FFB305',
+                                                marginLeft: "0.01px"
+                                            }}
+                                        >
+                                            R
+                                        </Avatar>
+                                    </div>
+                                    <div className="groupAvt2">
+                                        <Avatar
+                                            style={{
+                                                backgroundColor: '#FC62AA',
+                                                marginLeft: "0.01px"
+                                            }}
+                                        >
+                                            K
+                                        </Avatar>
+                                        <Avatar
+                                            style={{
+                                                backgroundColor: '#069BBB',
+                                                marginLeft: "0.2px"
+                                            }}
+                                        >
+                                            M
+                                        </Avatar>
+                                    </div>
+                                </Avatar.Group>)
+                                :
+                                (<img
+                                    className="conversationImg"
+                                    src={
+                                        friendInfo?.profilePicture
+                                            ? PF + friendInfo.profilePicture
+                                            : PF + "person/noAvatar.png"
+                                    }
+                                    alt=""
+                                />)}
                     </Link>
                     <div className="titleName">
-                        <h3>{friendInfo.username}</h3>
+                        {
+                            currentChat.isGroup ?
+                                <h3>{currentChat.name}</h3>
+                                :
+                                <h3>{friendInfo.username}</h3>
+                        }
                         <div className="timeTop">time</div>
                     </div>
                 </div>

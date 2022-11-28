@@ -1,0 +1,104 @@
+.login {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-image: url(../../../public/assets/vector.svg);
+}
+
+.loginWrapper {
+  width: 70%;
+  height: 85%;
+}
+
+.loginLeft,
+.loginRight {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.loginLogo {
+  font-size: 50px;
+  font-weight: 800;
+  color: #0167fd;
+}
+
+.loginDesc {
+  font-weight: 400;
+  font-size: 1.25em;
+  width: 350px;
+  text-align: center;
+  color: #5d5e5f;
+}
+
+.loginBox {
+  max-height: 600px;
+  width: 400px;
+  padding: 20px;
+  background-color: white;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.inputVerify {
+  border-radius: 5px;
+  border: 1px solid powderblue;
+  width: 300px;
+  height: 50px;
+  margin-left: 30px;
+  text-align: center;
+}
+
+.loginInput {
+  height: 50px;
+  border-radius: 10px;
+  border: 1px solid gray;
+  font-size: 18px;
+  padding-left: 20px;
+  width: 360px;
+}
+
+.loginInput:focus {
+  outline: none;
+}
+
+.btnSendCode {
+  border-radius: 5px;
+  width: 100px;
+  margin: 10px 50px 10px 130px;
+  border: 1px solid gray;
+}
+
+.loginButton {
+  height: 50px;
+  width: 100%;
+  border-radius: 10px;
+  border: none;
+  background-color: #0184e0;
+  color: white;
+  font-size: 20px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+
+.loginRegisterButton {
+  height: 50px;
+  width: 100%;
+  border-radius: 10px;
+  border: none;
+  background-color: #42b72a;
+  color: white;
+  font-size: 20px;
+  font-weight: 500;
+  cursor: pointer;
+}
